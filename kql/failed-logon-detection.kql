@@ -1,1 +1,10 @@
-
+```kusto
+SecurityEvent
+| where EventID == 4625
+| summarize FailedAttempts = count(),
+            FirstAttempt = min(TimeGenerated),
+            LastAttempt = max(TimeGenerated)
+    by Computer, IpAddress, LogonType
+| where FailedAttempts >= 5
+| extend TimeGenerated = LastAttempt
+```
